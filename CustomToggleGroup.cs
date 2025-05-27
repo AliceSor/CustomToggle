@@ -7,6 +7,8 @@ namespace SA.CustomToggle
 {
     public class CustomToggleGroup : MonoBehaviour
     {
+        [SerializeField] protected bool showDebug = false;
+
         public UnityEvent onValuesChanged;
         public UnityEvent onCurrentToggleChanged;
         public UnityEvent onToggleClicked;
@@ -30,6 +32,9 @@ namespace SA.CustomToggle
 
         public virtual void Init()
         {
+            if (showDebug)
+                Debug.Log($"{name}: Init called", this);
+
             if (buttons == null)
                 buttons = new List<ICustomToggle>();
 
@@ -40,6 +45,9 @@ namespace SA.CustomToggle
 
         protected void UpdateChosenButtons()
         {
+            if (showDebug)
+                Debug.Log($"{name}: UpdateChosenButtons called", this);
+
             //Debug.Log("UpdateChosenButtons");
             chosenButtons.Clear();
             foreach (var i in buttons)
@@ -91,6 +99,9 @@ namespace SA.CustomToggle
 
         public void RegisterButton(ICustomToggle newB)
         {
+            if (showDebug)
+                Debug.Log($"{name}: RegisterButton {newB}", this);
+
             if (buttons == null)
                 buttons = new List<ICustomToggle>();
             if (!buttons.Contains(newB))
@@ -99,6 +110,9 @@ namespace SA.CustomToggle
 
         public void UnregisterButton(ICustomToggle newB)
         {
+            if (showDebug)
+                Debug.Log($"{name}: UnregisterButton {newB}", this);
+
             if (buttons != null)
                 if (buttons.Contains(newB))
                     buttons.Remove(newB);
@@ -106,6 +120,9 @@ namespace SA.CustomToggle
 
         public void ButtonClicked(ICustomToggle button)
         {
+            if (showDebug)
+                Debug.Log($"{name}: ButtonClicked {button}", this);
+
             if (allowOnlyOne)
                 ButtonClickedForSingleMode(button);
             else
@@ -115,6 +132,9 @@ namespace SA.CustomToggle
 
         private void ButtonClickedForMultipleMode(ICustomToggle button)
         {
+            if (showDebug)
+                Debug.Log($"{name}: ButtonClickedForMultipleMode {button}", this);
+
             // Check if we have buttons
             // if allowSwitch of we just switch
             // else we check if any other options left. If they are we can switch off else do nothing
@@ -163,6 +183,9 @@ namespace SA.CustomToggle
 
         private void ButtonClickedForSingleMode(ICustomToggle button)
         {
+            if (showDebug)
+                Debug.Log($"{name}: ButtonClickedForSingleMode {button}", this);
+
             // Check if we have buttons
             // if allowSwitch of we just switch
             // else if can switch then switch else do nothing
@@ -222,6 +245,9 @@ namespace SA.CustomToggle
 
         public void DisableAll()
         {
+            if (showDebug)
+                Debug.Log($"{name}: DisableAll called", this);
+
             if (buttons != null)
                 foreach (ICustomToggle i in buttons)
                     i.Toggle(false);

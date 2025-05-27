@@ -8,7 +8,8 @@ namespace SA.CustomToggle
 {
     public abstract class AbstaractCustomToggle : MonoBehaviour, ICustomToggle
     {
-        //public bool interactable;
+        [SerializeField] protected bool showDebug = false;
+
         public bool isOn;
 
         [Header("Toggle group")]
@@ -30,8 +31,10 @@ namespace SA.CustomToggle
 
         private bool subscribed = false;
 
-        public void OnEnable()
+        protected virtual void OnEnable()
         {
+            if (showDebug)
+                Debug.Log($"{name}: OnEnable called", this);
             if (targetButton == null)
                 targetButton = GetComponent<Button>();
             if (targetButton != null && !subscribed)
@@ -45,8 +48,10 @@ namespace SA.CustomToggle
             }
         }
 
-        public void OnDestroy()
+        protected virtual void OnDisable()
         {
+            if (showDebug)
+                Debug.Log($"{name}: OnDisable called", this);
             if (targetButton != null)
                 targetButton.onClick.RemoveListener(OnClick);
             if (toggleGroup != null)
@@ -76,7 +81,7 @@ namespace SA.CustomToggle
 
         public virtual void OnClick()
         {
-            //    SLDebug.Log("Toggle clicked " + gameObject.name);
+            if (showDebug) SLDebug.Log("Toggle clicked " + gameObject.name);
             if (toggleGroup != null)
                 toggleGroup.ButtonClicked(this);
             else
@@ -90,6 +95,13 @@ namespace SA.CustomToggle
         public bool IsOn()
         {
             return isOn;
+        }
+
+        public virtual void SetToggle(bool value)
+        {
+            if (showDebug)
+                Debug.Log($"{name}: SetToggle({value}) called", this);
+            Toggle(value);
         }
     }
 }

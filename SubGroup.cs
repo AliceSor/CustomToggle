@@ -6,11 +6,16 @@ namespace SA.CustomToggle
 {
     public class SubGroup : MonoBehaviour
     {
+        [SerializeField] protected bool showDebug = false;
+
         protected List<ICustomToggle> buttons;
         public List<ICustomToggle> chosenButtons = new List<ICustomToggle>();
 
         public virtual void Init()
         {
+            if (showDebug)
+                Debug.Log($"{name}: Init called", this);
+
             if (buttons == null)
                 buttons = new List<ICustomToggle>();
         }
@@ -26,6 +31,9 @@ namespace SA.CustomToggle
 
         public void ButtonClicked(ICustomToggle button)
         {
+            if (showDebug)
+                Debug.Log($"{name}: ButtonClicked {button}", this);
+
             // Here we check button and if needed uncheck other toggles in group
 
             // So, if toggle is off - that mean before click if was on - we will do nothing 
@@ -42,6 +50,9 @@ namespace SA.CustomToggle
 
         public void RegisterButton(ICustomToggle newB)
         {
+            if (showDebug)
+                Debug.Log($"{name}: RegisterButton {newB}", this);
+
             if (buttons == null)
                 buttons = new List<ICustomToggle>();
             if (!buttons.Contains(newB))
@@ -50,6 +61,9 @@ namespace SA.CustomToggle
 
         public void UnregisterButton(ICustomToggle newB)
         {
+            if (showDebug)
+                Debug.Log($"{name}: UnregisterButton {newB}", this);
+
             if (buttons != null)
                 if (buttons.Contains(newB))
                     buttons.Remove(newB);
