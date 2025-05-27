@@ -2,42 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(AbstaractCustomToggle))]
-public class SubGroupMember : MonoBehaviour
+namespace SA.CustomToggle
 {
-    public SubGroup subGroup;
-    private AbstaractCustomToggle toggle;
-
-    private void Start()
+    [RequireComponent(typeof(AbstaractCustomToggle))]
+    public class SubGroupMember : MonoBehaviour
     {
-        toggle = GetComponent<AbstaractCustomToggle>();
-        toggle.onValueChanged.AddListener(OnValueChanged);
+        public SubGroup subGroup;
+        private AbstaractCustomToggle toggle;
 
-        if (subGroup != null)
+        private void Start()
         {
-            subGroup.RegisterButton(toggle);
-        }
-    }
+            toggle = GetComponent<AbstaractCustomToggle>();
+            toggle.onValueChanged.AddListener(OnValueChanged);
 
-    private void OnDestroy()
-    {
-        if (toggle != null)
-        {
-            toggle.onValueChanged.RemoveListener(OnValueChanged);
+            if (subGroup != null)
+                subGroup.RegisterButton(toggle);
         }
 
-        if (subGroup != null)
+        private void OnDestroy()
         {
-            subGroup.UnregisterButton(toggle);
-        }
-    }
+            if (toggle != null)
+                toggle.onValueChanged.RemoveListener(OnValueChanged);
 
-    public void OnValueChanged()
-    {
-        if (subGroup != null)
+            if (subGroup != null)
+                subGroup.UnregisterButton(toggle);
+        }
+
+        public void OnValueChanged()
         {
-            //Debug.Log("Toggle value changed" + toggle.GetToggleValue().ToString() + " : " + toggle.isOn.ToString());
-            subGroup.ButtonClicked(toggle);
+            if (subGroup != null)
+                //Debug.Log("Toggle value changed" + toggle.GetToggleValue().ToString() + " : " + toggle.isOn.ToString());
+                subGroup.ButtonClicked(toggle);
         }
     }
 }

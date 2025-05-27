@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ICustomToggle
+namespace SA.CustomToggle
 {
-    void Toggle(bool value);
-    void OnClick();
-    object GetToggleValue();
-    bool IsOn();
+    public interface ICustomToggle
+    {
+        void Toggle(bool value);
+        void OnClick();
+        object GetToggleValue();
+        bool IsOn();
+    }
 }

@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimpleToggle : AbstaractCustomToggle
+namespace SA.CustomToggle
 {
-    public override object GetToggleValue()
+    public class SimpleToggle : AbstaractCustomToggle
     {
-        return null;
+        public override object GetToggleValue()
+        {
+            return null;
+        }
     }
 }

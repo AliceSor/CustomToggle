@@ -4,89 +4,92 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public abstract class AbstaractCustomToggle : MonoBehaviour, ICustomToggle
+namespace SA.CustomToggle
 {
-    //public bool interactable;
-    public bool isOn;
-
-    [Header("Toggle group")]
-    public CustomToggleGroup toggleGroup;
-
-    [Header("Target button")]
-    [Tooltip("In case this field will be empty this script will search for a button on this object")]
-    public Button targetButton;
-
-    [Header("Target graffic objects")]
-    [Tooltip("This gameObjects will be disabled depending on the toggle state")]
-    public GameObject chosen;
-    public GameObject notChosen;
-
-    [Space(10)]
-    public UnityEvent onValueChanged;
-    public UnityEvent onTurnedOn;
-    public UnityEvent onTurnedOff;
-
-    private bool subscribed = false;
-
-    public void OnEnable()
+    public abstract class AbstaractCustomToggle : MonoBehaviour, ICustomToggle
     {
-        if (targetButton == null)
-            targetButton = GetComponent<Button>();
-        if (targetButton != null && !subscribed)
+        //public bool interactable;
+        public bool isOn;
+
+        [Header("Toggle group")]
+        public CustomToggleGroup toggleGroup;
+
+        [Header("Target button")]
+        [Tooltip("In case this field will be empty this script will search for a button on this object")]
+        public Button targetButton;
+
+        [Header("Target graffic objects")]
+        [Tooltip("This gameObjects will be disabled depending on the toggle state")]
+        public GameObject chosen;
+        public GameObject notChosen;
+
+        [Space(10)]
+        public UnityEvent onValueChanged;
+        public UnityEvent onTurnedOn;
+        public UnityEvent onTurnedOff;
+
+        private bool subscribed = false;
+
+        public void OnEnable()
         {
-            targetButton.onClick.AddListener(OnClick);
-            subscribed = true;
+            if (targetButton == null)
+                targetButton = GetComponent<Button>();
+            if (targetButton != null && !subscribed)
+            {
+                targetButton.onClick.AddListener(OnClick);
+                subscribed = true;
+            }
+            if (toggleGroup != null)
+            {
+                toggleGroup.RegisterButton(this);
+            }
         }
-        if (toggleGroup != null)
+
+        public void OnDestroy()
         {
-            toggleGroup.RegisterButton(this);
+            if (targetButton != null)
+                targetButton.onClick.RemoveListener(OnClick);
+            if (toggleGroup != null)
+            {
+                toggleGroup.UnregisterButton(this);
+            }
         }
-    }
 
-    public void OnDestroy()
-    {
-        if (targetButton != null)
-            targetButton.onClick.RemoveListener(OnClick);
-        if (toggleGroup != null)
+        public void Toggle(bool value)
         {
-            toggleGroup.UnregisterButton(this);
+            ToggleGraffic(value);
+            isOn = value;
+            if (isOn)
+                onTurnedOn?.Invoke();
+            else
+                onTurnedOff?.Invoke();
+            onValueChanged?.Invoke();
         }
-    }
 
-    public void Toggle(bool value)
-    {
-        ToggleGraffic(value);
-        isOn = value;
-        if (isOn)
-            onTurnedOn?.Invoke();
-        else
-            onTurnedOff?.Invoke();
-        onValueChanged?.Invoke();
-    }
-
-    public virtual void ToggleGraffic(bool value)
-    {
-        if (chosen != null)
-            chosen.SetActive(value);
-        if (notChosen != null)
-            notChosen.SetActive(!value);
-    }
-
-    public virtual void OnClick()
-    {
-    //    SLDebug.Log("Toggle clicked " + gameObject.name);
-        if (toggleGroup != null)
-            toggleGroup.ButtonClicked(this);
-        else
+        public virtual void ToggleGraffic(bool value)
         {
-            Toggle(!isOn);
+            if (chosen != null)
+                chosen.SetActive(value);
+            if (notChosen != null)
+                notChosen.SetActive(!value);
         }
-    }
 
-    public abstract object GetToggleValue();
+        public virtual void OnClick()
+        {
+            //    SLDebug.Log("Toggle clicked " + gameObject.name);
+            if (toggleGroup != null)
+                toggleGroup.ButtonClicked(this);
+            else
+            {
+                Toggle(!isOn);
+            }
+        }
 
-    public bool IsOn()
-    {
-        return isOn;
+        public abstract object GetToggleValue();
+
+        public bool IsOn()
+        {
+            return isOn;
+        }
     }
 }
