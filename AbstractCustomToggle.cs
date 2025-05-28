@@ -81,7 +81,7 @@ namespace SA.CustomToggle
 
         public virtual void OnClick()
         {
-            if (showDebug) SLDebug.Log("Toggle clicked " + gameObject.name);
+            if (showDebug) Debug.Log("Toggle clicked " + gameObject.name);
             if (toggleGroup != null)
                 toggleGroup.ButtonClicked(this);
             else
