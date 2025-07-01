@@ -53,7 +53,10 @@ namespace SA.CustomToggle
             if (showDebug)
                 Debug.Log($"{name}: OnDisable called", this);
             if (targetButton != null)
+            {
                 targetButton.onClick.RemoveListener(OnClick);
+                subscribed = false;
+            }
             if (toggleGroup != null)
             {
                 toggleGroup.UnregisterButton(this);

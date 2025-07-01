@@ -243,6 +243,16 @@ namespace SA.CustomToggle
             }
         }
 
+        public void UnclickAll()
+        {
+            if (showDebug)
+                Debug.Log($"{name}: UnclcikAll called", this);
+
+            if (buttons != null)
+                foreach (ICustomToggle i in buttons)
+                    i.Toggle(false);
+        }
+
         public void DisableAll()
         {
             if (showDebug)
