@@ -26,7 +26,7 @@ namespace SA.CustomToggle
         public List<ICustomToggle> Buttons { get => buttons; }
         public List<ICustomToggle> chosenButtons = new List<ICustomToggle>();
 
-        protected List<ICustomToggle> buttons;
+        protected List<ICustomToggle> buttons = new List<ICustomToggle>();
 
         public Transform TogglesRoot { get => togglesRoot; set => togglesRoot = value; }
 
